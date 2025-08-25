@@ -40,7 +40,7 @@ def file_read(e):
     except UnicodeDecodeError:
         text = "디코딩 실패 인코딩을 확인하세요"
     except UnicodeEncodeError:
-        text = "인코딩 실패 디코디을 확인하세요"
+        text = "인코딩 실패 디코딩을 확인하세요"
     
 
     return text
