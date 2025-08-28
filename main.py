@@ -10,7 +10,7 @@ def file_read(e):
     MAX_MB = 10
     kk = []
     try:
-        if not e.endswith(".log"):
+        if not e.endswith(".log"): # endswith 확장자를 체크하는 함수
             text = "지원하지 않는 파일 확장자입니다."
 
         size_mb = os.path.getsize(e) / (1024 * 1024)
