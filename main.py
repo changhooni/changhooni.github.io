@@ -1,5 +1,9 @@
 import os
+import json
+from datetime import datetime
 import pandas as pd
+
+OUTPUT_JSON_FILE = 'mission_computer_main.json'
 
 def Hello()->str:
     a = "Hello Mars"
@@ -79,8 +83,8 @@ def file_read(e):
     return text
 
 if __name__ == "__main__":
-    #msg = Hello()
-    #print(msg)
+    msg = Hello()
+    print(msg)
 
     txt = file_read("mission_computer_main.log")
 
