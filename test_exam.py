@@ -58,7 +58,7 @@ def read_log(path: str = "mission_computer_main.log")->str:
                 datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
             except ValueError:
                 print('타입 오류')
-                return False
+                continue
             log_list.append((timestamp, message))
         print('로그 리스트 timestamp, message')
         print(log_list)
