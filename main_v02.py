@@ -24,12 +24,14 @@ json.dump(data, file, ensure_ascii=False, indent=4)  # 데이터를 JSON으로 �
 LOG_FILE = 'mission_computer_main.log'
 OUTPUT_JSON_FILE = 'mission_computer_main.json'
 MAX_MB = 10
+LOG_MD_FILE = 'log_analysis.md'
 
 def Hello() -> str:
     return "Hello Mars"
 
 def read_and_process_log(file_path):
     log_list = []
+    danger_keyword = ['폭발', '누출', '고온', 'Oxygen']
 
     try:
         # 확장자 체크
@@ -102,7 +104,7 @@ def read_and_process_log(file_path):
             if ',' not in line:
                 print(f"[line {i}] 쉼표 없음 → 무시됨: {line}")
                 continue
-            parts = line.split(',', 1)
+            parts = line.split(',', 2)
             '''
             line.split(',', 1)는 ,를 기준으로 
             2조각(1로 지정된 부분에 숫자에 따라 나누는 수가 정해짐)으로 
@@ -129,7 +131,7 @@ def read_and_process_log(file_path):
             단순성 + 안전성 때문에 대부분 split(',', 1)을 사용합니다.
             '''
             timestamp = parts[0].strip()
-            message = parts[1].strip()
+            message = parts[2].strip()
 
             try:
                 datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
@@ -141,11 +143,10 @@ def read_and_process_log(file_path):
             except ValueError:
                 continue  # 날짜 형식이 맞지 않으면 건너뜀
             
-            log_list.append([timestamp, message])
+            log_list.append((timestamp, message))
 
         print("\n📄 [리스트 객체 출력]")
-        for item in log_list:
-            print(item)
+        print(log_list)
 
         # 시간 역순 정렬
         try:
@@ -182,16 +183,20 @@ def read_and_process_log(file_path):
             return f"❌ 시간 파싱 오류: {ve}"
 
         print("\n📄 [시간 역순 정렬된 리스트 출력]")
-        for item in sorted_list:
-            print(item)
+        print(sorted_list)
 
         # 리스트 → 딕셔너리 변환
-        log_dict = {timestamp: message for timestamp, message in sorted_list}
+        #log_dict = {timestamp: message for timestamp, message in sorted_list}
+        log_dict = dict(sorted_list)
         # log_dict = {timestamp: message for timestamp, message in sorted_list if "에러" in message}
         # 메세지에 "에러"가 포함된 딕셔너리에 추가
 
         print(f"\n✅ [딕셔너리 데이터 출력]")
-        return log_dict
+        print(log_dict)
+
+        print('-------------')
+        print(log_dict)
+        #return log_dict
     
         '''
         딕셔너리 변환에 다른 방법
@@ -238,8 +243,47 @@ def read_and_process_log(file_path):
             json.dump(log_dict, json_file, ensure_ascii=False, indent=4)
 
         print(f"\n✅ JSON 파일 저장 완료: {OUTPUT_JSON_FILE}")
-        return log_dict
+        #return log_dict
 
+        # 위험 로그 키워드 검색
+        danger_log = [
+            (timestamp, message)
+            for timestamp, message in log_dict.items()
+            if any(k.lower() in message.lower() for k in danger_keyword)
+        ]
+
+        # Markdown 저장
+        with open(LOG_MD_FILE, 'w', encoding='utf-8') as d:
+            d.write("# ⚠️ 위험 로그 보고서\n\n")
+            d.write("다음은 위험 키워드가 포함된 로그 목록입니다.\n\n")
+            d.write("| Timestamp | Message |\n")
+            d.write("|-----------|---------|\n")
+            for log in danger_log:
+                d.write(f'| {log[0]} | {log[1]} |\n')
+
+        # 저장된 내용 출력
+        with open('log_analysis.md', 'r', encoding='utf-8') as danger:
+            for line in danger:
+                print(line.strip())
+
+        # 🔍 검색 기능
+        search_term = input("\n🔍 검색할 키워드를 입력하세요: ").lower()
+
+        try:
+            with open(OUTPUT_JSON_FILE, 'r', encoding='utf-8') as f:
+                search_data = json.load(f)
+                print(f"\n🔎 '{search_term}'이(가) 포함된 로그:")
+                print("-" * 50)
+                for timestamp, message in search_data.items():
+                    if search_term in message.lower():
+                        print(f"{timestamp} | {message}")
+        except FileNotFoundError:
+            print("❌ 검색용 JSON 파일을 찾을 수 없습니다.")
+        except json.JSONDecodeError:
+            print("❌ JSON 파일 파싱 오류.")
+
+
+        
     except FileNotFoundError:
         return "❌ 오류: 파일이 존재하지 않습니다."
     except UnicodeDecodeError:
@@ -250,8 +294,8 @@ def read_and_process_log(file_path):
         return f"❌ 알 수 없는 오류 발생: {e}"
 
 if __name__ == "__main__":
-    print(Hello())
+    #print(Hello())
     result = read_and_process_log(LOG_FILE)
 
-    print("\n📦 [최종 결과]")
-    print(result)
+    #print("\n📦 [최종 결과]")
+    #print(result)
