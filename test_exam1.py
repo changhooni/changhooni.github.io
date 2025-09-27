@@ -16,7 +16,7 @@ git merge --abort
  - git fetch
 
  ㄴ3번 시험
- 오류 print에 문제에서 오류 처리 문구 넣어서 처리
+ 오류 print('ddd')에 상황에 맞는 오류 문구를 'ddd'를 삭제하고 넣으면 됨
 '''
 
 from datetime import datetime
@@ -67,7 +67,7 @@ def main():
                 else:
                     raise RuntimeError
             except Exception as e:
-                print(f"error: {e}")
+                raise ValueError
 
         print(log_list)
         try:
