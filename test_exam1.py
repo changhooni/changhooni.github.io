@@ -35,18 +35,28 @@ def main():
     result = read_log()
     log_list = []
     try:
+        # log파일에 첫번재 줄에 대한 확인 부분
         if not result.startswith("timestamp,event,message"):
             raise RuntimeError
-        
+        # log파일에 첫번재 줄에 대한 확인 부분
+
+        # return 값으로 넘어온 데이터 가공을 위한 for문 시작
+        # result.splitlines()[1:] 헤드가 아닌 부분부터 데이터 확인
         for i, logs in enumerate(result.splitlines()[1:] , start=1):
+            # 데이터값이 빈값이면 무시
             if not logs:
                 continue
-
+            # parts 변수에 3조각(.split(',', 2) ',' 표시를 
+            # 기준으로 지정된 부분에 숫자에 따라 나누는 수가 정해짐)
             parts = logs.strip().split(',', 2)
+
             try: 
+                # parts 데이터가 3조각여부 확인
                 if len(parts) == 3:
+                    # parts[0] 첫번째 값에 데이터 타입 확인 조건문
                     if datetime.strptime(parts[0], '%Y-%m-%d %H:%M:%S'):
                         try:
+                            # 오류가 존재하지 않으면 log_list 배열에 조건에 맞는 값을 넣음
                             log_list.append((parts[0], parts[2]))
                         except RuntimeError:
                             raise RuntimeError
@@ -59,14 +69,15 @@ def main():
 
         print(log_list)
         try:
+            # log_list 값을 데이터 역순으로 재정렬
             sorted_list = sorted(
                 log_list,
                 key=lambda x: x[0],
-                reverse=True
+                reverse=True false # True 역순으로 처리 , False 처리된 데이터로 정렬
             )
 
             print(sorted_list)
-            dict_list = dict(sorted_list)
+            dict_list = dict(sorted_list) # 사전 작업 위한 dict 내장 함수 사용
             print(dict_list)
         except RuntimeError:
             raise RuntimeError
