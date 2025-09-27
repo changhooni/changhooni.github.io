@@ -15,6 +15,8 @@ git merge --abort
 변경사항을 로컬로 가져오되 현재 브랜치에는 병합하기 않음
  - git fetch
 
+ ㄴ3번 시험
+ 오류 print에 문제에서 오류 처리 문구 넣어서 처리
 '''
 
 from datetime import datetime
@@ -73,7 +75,7 @@ def main():
             sorted_list = sorted(
                 log_list,
                 key=lambda x: x[0],
-                reverse=True false # True 역순으로 처리 , False 처리된 데이터로 정렬
+                reverse=True # True 역순으로 처리 , False 처리된 데이터로 정렬
             )
 
             print(sorted_list)
