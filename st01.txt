@@ -366,4 +366,6 @@ for char in str:
 
 str_arr = ''.join(str_arr)
 print(str_arr)
+
+print(input().swapcase())
 '''
