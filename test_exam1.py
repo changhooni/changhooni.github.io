@@ -15,7 +15,7 @@ git merge --abort
 변경사항을 로컬로 가져오되 현재 브랜치에는 병합하기 않음
  - git fetch
 
- ㄴ3번 시험
+ 3번 시험
  오류 print('ddd')에 상황에 맞는 오류 문구를 'ddd'를 삭제하고 넣으면 됨
 '''
 
@@ -25,7 +25,7 @@ def read_log(path: str = "mission_computer_main.log")->str:
     try :
         with open(path, 'r', encoding='utf-8') as f:
             return f.read()
-    except FileNotFoundError:
+    except (FileNotFoundError, IOError):
         print("파일이 존재하지 않습니다.")
     except UnicodeDecodeError:
         print("인코딩 에러")
@@ -35,12 +35,13 @@ def read_log(path: str = "mission_computer_main.log")->str:
 
 def main():
     result = read_log()
+    print("============read_log=================")
+    print(result)
     log_list = []
     try:
         # log파일에 첫번재 줄에 대한 확인 부분
         if not result.startswith("timestamp,event,message"):
             raise RuntimeError
-        # log파일에 첫번재 줄에 대한 확인 부분
 
         # return 값으로 넘어온 데이터 가공을 위한 for문 시작
         # result.splitlines()[1:] 헤드가 아닌 부분부터 데이터 확인
@@ -59,7 +60,7 @@ def main():
                     if datetime.strptime(parts[0], '%Y-%m-%d %H:%M:%S'):
                         try:
                             # 오류가 존재하지 않으면 log_list 배열에 조건에 맞는 값을 넣음
-                            log_list.append((parts[0], parts[2]))
+                            log_list.append((parts[0].strip(), parts[2].strip()))
                         except RuntimeError:
                             raise RuntimeError
                     else:
@@ -68,7 +69,7 @@ def main():
                     raise RuntimeError
             except Exception as e:
                 raise ValueError
-
+        print("============log_list=================")
         print(log_list)
         try:
             # log_list 값을 데이터 역순으로 재정렬
@@ -77,9 +78,10 @@ def main():
                 key=lambda x: x[0],
                 reverse=True # True 역순으로 처리 , False 처리된 데이터로 정렬
             )
-
+            print("============sorted_list=================")
             print(sorted_list)
             dict_list = dict(sorted_list) # 사전 작업 위한 dict 내장 함수 사용
+            print("============dict_list=================")
             print(dict_list)
         except RuntimeError:
             raise RuntimeError
