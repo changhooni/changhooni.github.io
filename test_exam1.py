@@ -26,9 +26,9 @@ def read_log(path: str = "mission_computer_main.log")->str:
         with open(path, 'r', encoding='utf-8') as f:
             return f.read()
     except (FileNotFoundError, IOError):
-        print("파일이 존재하지 않습니다.")
+        print("File Error")
     except UnicodeDecodeError:
-        print("인코딩 에러")
+        print("Decoding Error")
     except Exception as e:
         print(f"{e}")
     return ""
@@ -66,9 +66,9 @@ def main():
                     else:
                         raise ValueError
                 else:
-                    raise RuntimeError
-            except Exception as e:
-                raise ValueError
+                    raise ValueError
+            except RuntimeError:
+                raise RuntimeError
         print("============log_list=================")
         print(log_list)
         try:
@@ -83,12 +83,12 @@ def main():
             dict_list = dict(sorted_list) # 사전 작업 위한 dict 내장 함수 사용
             print("============dict_list=================")
             print(dict_list)
-        except RuntimeError:
-            raise RuntimeError
+        except ValueError:
+            raise ValueError
     except (TypeError, ValueError):
-        print('ddd')
+        print('Invalid log format.')
     except RuntimeError:
-        print('ddd')
+        print('processing error.')
     except Exception:
         print("ddd")
 
