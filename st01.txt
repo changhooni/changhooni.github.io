@@ -178,7 +178,7 @@ cs50.edx.org
 
 
 
-9월 30일일
+9월 30일
 pccp 코딩 테스트 연습문제
 https://school.programmers.co.kr/learn/courses/30/lessons/181950?language=python3
 
