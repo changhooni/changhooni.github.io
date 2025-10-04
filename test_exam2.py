@@ -22,7 +22,7 @@ DENSITY_MAP = {
 MARS_GRAVITY_RATIO = 0.38
 
 # --- 핵심 계산 함수 정의 ---
-def sphere_area(diameter, material, thickness=1):
+def sphere_area(diameter: float, material: str, thickness: float=1)->tuple[float, float]:
     """
     반구체 돔의 표면적(m²)과 화성에서의 무게(kg)를 계산합니다.
 
@@ -41,35 +41,42 @@ def sphere_area(diameter, material, thickness=1):
     # --- 보너스 과제: 함수 내에서 인자값 유효성 검사 ---
     # 잘못된 값이 들어오면 계산을 시도하지 않고 즉시 ValueError를 발생(raise)시킵니다.
     if material not in DENSITY_MAP:
-        raise ValueError(f"지원하지 않는 재질입니다. {list(DENSITY_MAP.keys())} 중에서 선택해주세요.")
+        raise ValueError
     
     if not isinstance(diameter, (int, float)) or diameter <= 0:
-        raise ValueError("지름은 0보다 큰 숫자여야 합니다.")
+        raise ValueError
 
     if not isinstance(thickness, (int, float)) or thickness <= 0:
-        raise ValueError("두께는 0보다 큰 숫자여야 합니다.")
+        raise ValueError
     
     # --- 계산 로직 ---
     # 1. 단위 통일: 계산의 일관성을 위해 모든 단위를 cm, g 기준으로 맞춥니다.
-    radius_cm = (diameter * 100) / 2
+    # radius_cm = (diameter * 100) / 2
     
     # 2. 돔의 표면적(m²) 계산 (출력용)
-    area_m2 = 2 * math.pi * ((diameter / 2) ** 2)
+    #area_m2 = 2 * math.pi * ((diameter / 2) ** 2)
+    try: 
+        area_m2 = math.pi * (diameter)
 
-    # 3. 돔의 부피(cm³) 계산 (무게 계산용)
-    area_cm2 = 2 * math.pi * (radius_cm ** 2)
-    volume_cm3 = area_cm2 * thickness
-    
-    # 4. 돔의 질량(kg) 계산
-    density = DENSITY_MAP[material]
-    mass_g = volume_cm3 * density
-    mass_kg = mass_g / 1000
+        # 3. 돔의 부피(cm³) 계산 (무게 계산용)
+        area_cm2 = area_m2 * 10000
+        volume_cm3 = area_cm2 * thickness
+        #area_cm2 = 2 * math.pi * (radius_cm ** 2)
+        #volume_cm3 = area_cm2 * thickness
+        
+        # 4. 돔의 질량(kg) 계산
+        density = DENSITY_MAP[material]
+        mass_kg = density * volume_cm3 / 1000
+        #mass_g = volume_cm3 * density
+        #mass_kg = mass_g / 1000
 
-    # 5. 화성에서의 무게 계산
-    weight_on_mars = mass_kg * MARS_GRAVITY_RATIO
-    
-    return area_m2, weight_on_mars
+        # 5. 화성에서의 무게 계산
+        #weight_on_mars = mass_kg * MARS_GRAVITY_RATIO
+        mass_weight_kg = mass_kg * 0.38
+    except Exception:
+        Exception
 
+    return area_m2, mass_weight_kg
 # --- 메인 프로그램 실행 부분 ---
 def main():
     """메인 프로그램을 실행하는 함수입니다. 프로그램은 한 번만 실행됩니다."""
@@ -95,26 +102,26 @@ def main():
         # 2. 핵심 계산 함수 호출
         #    잘못된 재질, 지름, 두께가 입력되면 이 함수가 ValueError를 발생시키고,
         #    아래 except 블록에서 처리됩니다.
-        calculated_area, calculated_weight = sphere_area(diameter_m, material_input, thickness_cm)
+        area, w = sphere_area(diameter_m, material_input, thickness_cm)
 
         # 3. 계산 결과를 전역 변수에 저장
         dome_material = material_input
         dome_diameter = diameter_m
         dome_thickness = thickness_cm
-        dome_area = calculated_area
-        dome_weight = calculated_weight
+        dome_area = area
+        dome_weight = w
         
         # 4. 결과 출력
         print("\n[계산 결과]")
-        print(f"재질 ⇒ {dome_material}, 지름 ⇒ {dome_diameter}, 두께 ⇒ {dome_thickness}, "
-              f"면적 ⇒ {dome_area:.3f}, 무게 ⇒ {dome_weight:.3f} kg")
+        print(f"재질 : {dome_material}, 지름 : {dome_diameter}, 두께 : {dome_thickness}, "
+              f"면적 : {dome_area:.3f}, 무게 : {dome_weight:.3f} kg")
 
     except ValueError as e:
         # 잘못된 입력에 대한 모든 오류를 여기서 처리합니다.
-        print(f"\n[오류] 입력값이 잘못되었습니다: {e}")
+        print("Invalid input")
 
     except Exception as e:
-        print(f"\n[알 수 없는 오류] 오류가 발생했습니다: {e}")
+        print("Processing error")
 
 # 이 스크립트가 메인으로 실행될 때만 main() 함수를 호출합니다.
 if __name__ == "__main__":
