@@ -12,7 +12,7 @@ git merge --abort
  - git reset --soft HEAD^
  체크아웃된 로컬 브랜치의 upstream을 origin/new-feature으로 설정
  - git branch -u origin/new-feature
-변경사항을 로컬로 가져오되 현재 브랜치에는 병합하기 않음
+변경사항을 로컬로 가져오되 현재 브랜치에는 병합하지 않음
  - git fetch
 
  3번 시험
