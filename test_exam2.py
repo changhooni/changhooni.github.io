@@ -3,14 +3,6 @@
 # Step 1: 수학 계산을 위한 math 모듈 가져오기
 import math
 
-# --- 전역 변수 선언 ---
-# 계산 결과를 저장할 전역 변수들을 미리 선언하고 None으로 초기화합니다.
-dome_material = None
-dome_diameter = None
-dome_thickness = None
-dome_area = None
-dome_weight = None
-
 # --- 상수 정의 ---
 # 재질과 밀도 데이터를 딕셔너리로 관리하여 유지보수를 용이하게 합니다.
 DENSITY_MAP = {
@@ -23,7 +15,7 @@ MARS_GRAVITY_RATIO = 0.38
 
 # --- 핵심 계산 함수 정의 ---
 def sphere_area(diameter: float, material: str, thickness: float=1)->tuple[float, float]:
-    """
+    '''
     반구체 돔의 표면적(m²)과 화성에서의 무게(kg)를 계산합니다.
 
     Args:
@@ -36,7 +28,7 @@ def sphere_area(diameter: float, material: str, thickness: float=1)->tuple[float
 
     Raises:
         ValueError: 유효하지 않은 인자값이 들어올 경우, 명시적인 오류 메시지와 함께 예외를 발생시킵니다.
-    """
+    '''
     
     # --- 보너스 과제: 함수 내에서 인자값 유효성 검사 ---
     # 잘못된 값이 들어오면 계산을 시도하지 않고 즉시 ValueError를 발생(raise)시킵니다.
@@ -48,6 +40,11 @@ def sphere_area(diameter: float, material: str, thickness: float=1)->tuple[float
 
     if not isinstance(thickness, (int, float)) or thickness <= 0:
         raise ValueError
+    
+    if thickness == "":
+        thickness = 1.0  # 입력이 없으면 기본값 1.0 사용
+    else:
+        thickness = float(thickness)
     
     # --- 계산 로직 ---
     # 1. 단위 통일: 계산의 일관성을 위해 모든 단위를 cm, g 기준으로 맞춥니다.
@@ -74,47 +71,42 @@ def sphere_area(diameter: float, material: str, thickness: float=1)->tuple[float
         #weight_on_mars = mass_kg * MARS_GRAVITY_RATIO
         mass_weight_kg = mass_kg * 0.38
     except Exception:
-        Exception
+        raise Exception
 
     return area_m2, mass_weight_kg
 # --- 메인 프로그램 실행 부분 ---
 def main():
-    """메인 프로그램을 실행하는 함수입니다. 프로그램은 한 번만 실행됩니다."""
-    global dome_material, dome_diameter, dome_thickness, dome_area, dome_weight
-
     print("--- Mars 돔 구조물 설계 프로그램 ---")
-    
     # 사용자로부터 재질, 지름, 두께를 순서대로 입력받습니다.
     material_input = input("재질을 입력하세요 (유리, 알루미늄, 탄소강): ")
-    diameter_input = input("돔의 지름(m)을 입력하세요: ")
-    thickness_input = input("돔의 두께(cm)를 입력하세요 (기본값: 1, Enter 입력 시): ")
-    
-    # --- try-except 문을 사용한 예외 처리 ---
+    if material_input not in DENSITY_MAP:
+        raise ValueError    
     try:
-        # 1. 입력값들을 숫자로 변환
-        diameter_m = float(diameter_input)
-        
+        diameter_input = float(input("돔의 지름(m)을 입력하세요: "))
+        if not isinstance(diameter_input, (int, float)) or diameter_input <= 0:
+            raise ValueError        
+    except ValueError:
+        raise ValueError
+
+    try:
+        thickness_input = input("돔의 두께(cm)를 입력하세요 (기본값: 1, Enter 입력 시): ")
         if thickness_input == "":
             thickness_cm = 1.0  # 입력이 없으면 기본값 1.0 사용
         else:
             thickness_cm = float(thickness_input)
-
-        # 2. 핵심 계산 함수 호출
+    except ValueError:
+        raise ValueError
+    
+    # --- try-except 문을 사용한 예외 처리 ---
+    try:
+        # 1. 핵심 계산 함수 호출
         #    잘못된 재질, 지름, 두께가 입력되면 이 함수가 ValueError를 발생시키고,
         #    아래 except 블록에서 처리됩니다.
-        area, w = sphere_area(diameter_m, material_input, thickness_cm)
-
-        # 3. 계산 결과를 전역 변수에 저장
-        dome_material = material_input
-        dome_diameter = diameter_m
-        dome_thickness = thickness_cm
-        dome_area = area
-        dome_weight = w
-        
+        area, w = sphere_area(diameter_input, material_input, thickness_cm)
         # 4. 결과 출력
         print("\n[계산 결과]")
-        print(f"재질 : {dome_material}, 지름 : {dome_diameter}, 두께 : {dome_thickness}, "
-              f"면적 : {dome_area:.3f}, 무게 : {dome_weight:.3f} kg")
+        print(f"재질 : {material_input}, 지름 : {diameter_input}, 두께 : {thickness_cm}, "
+              f"면적 : {area:.3f}, 무게 : {w:.3f} kg")
 
     except ValueError as e:
         # 잘못된 입력에 대한 모든 오류를 여기서 처리합니다.
