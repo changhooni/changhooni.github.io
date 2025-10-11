@@ -41,7 +41,7 @@ def main():
     try:
         # log파일에 첫번재 줄에 대한 확인 부분
         if not result.startswith("timestamp,event,message"):
-            raise RuntimeError
+            raise ValueError
 
         # return 값으로 넘어온 데이터 가공을 위한 for문 시작
         # result.splitlines()[1:] 헤드가 아닌 부분부터 데이터 확인
@@ -83,8 +83,8 @@ def main():
             dict_list = dict(sorted_list) # 사전 작업 위한 dict 내장 함수 사용
             print("============dict_list=================")
             print(dict_list)
-        except ValueError:
-            raise ValueError
+        except RuntimeError:
+            raise RuntimeError
     except (TypeError, ValueError):
         print('Invalid log format.')
     except RuntimeError:
