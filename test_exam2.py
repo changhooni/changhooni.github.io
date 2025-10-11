@@ -41,7 +41,7 @@ def sphere_area(diameter: float, material: str, thickness: float=1)->tuple[float
     if not isinstance(thickness, (int, float)) or thickness <= 0:
         raise ValueError
     
-    if thickness == "":
+    if thickness == 0:
         thickness = 1.0  # 입력이 없으면 기본값 1.0 사용
     else:
         thickness = float(thickness)
@@ -76,29 +76,30 @@ def sphere_area(diameter: float, material: str, thickness: float=1)->tuple[float
     return area_m2, mass_weight_kg
 # --- 메인 프로그램 실행 부분 ---
 def main():
-    print("--- Mars 돔 구조물 설계 프로그램 ---")
-    # 사용자로부터 재질, 지름, 두께를 순서대로 입력받습니다.
-    material_input = input("재질을 입력하세요 (유리, 알루미늄, 탄소강): ")
-    if material_input not in DENSITY_MAP:
-        raise ValueError    
     try:
-        diameter_input = float(input("돔의 지름(m)을 입력하세요: "))
-        if not isinstance(diameter_input, (int, float)) or diameter_input <= 0:
-            raise ValueError        
-    except ValueError:
-        raise ValueError
+        print("--- Mars 돔 구조물 설계 프로그램 ---")
+        # 사용자로부터 재질, 지름, 두께를 순서대로 입력받습니다.
+        material_input = input("재질을 입력하세요 (유리, 알루미늄, 탄소강): ")
+        if material_input not in DENSITY_MAP:
+            raise ValueError    
+        try:
+            diameter_input = float(input("돔의 지름(m)을 입력하세요: "))
+            if not isinstance(diameter_input, (int, float)) or diameter_input <= 0:
+                raise ValueError        
+        except ValueError:
+            raise ValueError
 
-    try:
-        thickness_input = input("돔의 두께(cm)를 입력하세요 (기본값: 1, Enter 입력 시): ")
-        if thickness_input == "":
-            thickness_cm = 1.0  # 입력이 없으면 기본값 1.0 사용
-        else:
-            thickness_cm = float(thickness_input)
-    except ValueError:
-        raise ValueError
+        try:
+            thickness_input = float(input("돔의 두께(cm)를 입력하세요 (기본값: 1, Enter 입력 시): "))
+            if thickness_input == 0:
+                thickness_cm = 1.0  # 입력이 없으면 기본값 1.0 사용
+            else:
+                thickness_cm = float(thickness_input)
+        except ValueError:
+            raise ValueError
     
     # --- try-except 문을 사용한 예외 처리 ---
-    try:
+    
         # 1. 핵심 계산 함수 호출
         #    잘못된 재질, 지름, 두께가 입력되면 이 함수가 ValueError를 발생시키고,
         #    아래 except 블록에서 처리됩니다.
@@ -113,7 +114,7 @@ def main():
         print("Invalid input")
 
     except Exception as e:
-        print("Processing error")
+        print(f"Processing error: {e}")
 
 # 이 스크립트가 메인으로 실행될 때만 main() 함수를 호출합니다.
 if __name__ == "__main__":
