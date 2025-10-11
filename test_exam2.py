@@ -53,7 +53,7 @@ def sphere_area(diameter: float, material: str, thickness: float=1)->tuple[float
     # 2. 돔의 표면적(m²) 계산 (출력용)
     #area_m2 = 2 * math.pi * ((diameter / 2) ** 2)
     try: 
-        area_m2 = math.pi * (diameter)
+        area_m2 = math.pi * (diameter ** 2)
 
         # 3. 돔의 부피(cm³) 계산 (무게 계산용)
         area_cm2 = area_m2 * 10000
@@ -106,7 +106,7 @@ def main():
         area, w = sphere_area(diameter_input, material_input, thickness_cm)
         # 4. 결과 출력
         print("\n[계산 결과]")
-        print(f"재질 : {material_input}, 지름 : {diameter_input}, 두께 : {thickness_cm}, "
+        print(f"재질 : {material_input}, 지름 : {diameter_input:g}, 두께 : {thickness_cm:g}, "
               f"면적 : {area:.3f}, 무게 : {w:.3f} kg")
 
     except ValueError as e:
