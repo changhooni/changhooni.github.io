@@ -53,7 +53,7 @@ def sphere_area(diameter: float, material: str, thickness: float=1)->tuple[float
     # 2. 돔의 표면적(m²) 계산 (출력용)
     #area_m2 = 2 * math.pi * ((diameter / 2) ** 2)
     try: 
-        area_m2 = math.pi * (diameter ** 2)
+        area_m2 = math.pi * (diameter**2)
 
         # 3. 돔의 부피(cm³) 계산 (무게 계산용)
         area_cm2 = area_m2 * 10000
