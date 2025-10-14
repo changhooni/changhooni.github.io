@@ -14,7 +14,7 @@ DENSITY_MAP = {
 MARS_GRAVITY_RATIO = 0.38
 
 # --- 핵심 계산 함수 정의 ---
-def sphere_area(diameter: float, material: str, thickness: float=1)->tuple[float, float]:
+def sphere_area(diameter: float, material: str, thickness: float=1) -> tuple[float, float]:
     '''
     반구체 돔의 표면적(m²)과 화성에서의 무게(kg)를 계산합니다.
 
@@ -35,16 +35,19 @@ def sphere_area(diameter: float, material: str, thickness: float=1)->tuple[float
     if material not in DENSITY_MAP:
         raise ValueError
     
-    if not isinstance(diameter, (int, float)) or diameter <= 0:
+    if diameter <= 0:
         raise ValueError
 
-    if not isinstance(thickness, (int, float)) or thickness <= 0:
+    if thickness <= 0:
         raise ValueError
     
-    if thickness == 0:
+    if thickness == '':
         thickness = 1.0  # 입력이 없으면 기본값 1.0 사용
     else:
-        thickness = float(thickness)
+        try:
+            thickness = float(thickness)
+        except ValueError:
+            raise ValueError
     
     # --- 계산 로직 ---
     # 1. 단위 통일: 계산의 일관성을 위해 모든 단위를 cm, g 기준으로 맞춥니다.
@@ -83,18 +86,24 @@ def main():
         if material_input not in DENSITY_MAP:
             raise ValueError    
         try:
-            diameter_input = float(input("돔의 지름(m)을 입력하세요: "))
-            if not isinstance(diameter_input, (int, float)) or diameter_input <= 0:
+            diameter_input = input("돔의 지름(m)을 입력하세요: ").strip()
+            diameter_input = float(diameter_input)
+            if diameter_input <= 0:
                 raise ValueError        
         except ValueError:
             raise ValueError
 
         try:
-            thickness_input = float(input("돔의 두께(cm)를 입력하세요 (기본값: 1, Enter 입력 시): "))
-            if thickness_input == 0:
+            thickness_input = input("돔의 두께(cm)를 입력하세요 (기본값: 1, Enter 입력 시): ").strip()
+            if thickness_input == '':
                 thickness_cm = 1.0  # 입력이 없으면 기본값 1.0 사용
             else:
-                thickness_cm = float(thickness_input)
+                try:
+                    thickness_cm = float(thickness_input)
+                except ValueError:
+                    raise ValueError
+                if thickness_cm <= 0:
+                    raise ValueError
         except ValueError:
             raise ValueError
     
