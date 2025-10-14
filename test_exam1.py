@@ -15,8 +15,7 @@ git merge --abort
 변경사항을 로컬로 가져오되 현재 브랜치에는 병합하지 않음
  - git fetch
 
- 3번 시험
- 오류 print('ddd')에 상황에 맞는 오류 문구를 'ddd'를 삭제하고 넣으면 됨
+ 3번 시험 문제 정답
 '''
 
 from datetime import datetime
@@ -29,8 +28,8 @@ def read_log(path: str = "mission_computer_main.log")->str:
         print("File Error")
     except UnicodeDecodeError:
         print("Decoding Error")
-    except Exception as e:
-        print(f"{e}")
+    except Exception:
+        print("Error")
     return ""
 
 def main():
@@ -90,7 +89,7 @@ def main():
     except RuntimeError:
         print('processing error.')
     except Exception:
-        print("ddd")
+        print("Error")
 
 if __name__ == "__main__":
     main()

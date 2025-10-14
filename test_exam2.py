@@ -72,7 +72,7 @@ def sphere_area(diameter: float, material: str, thickness: float=1) -> tuple[flo
 
         # 5. 화성에서의 무게 계산
         #weight_on_mars = mass_kg * MARS_GRAVITY_RATIO
-        mass_weight_kg = mass_kg * 0.38
+        mass_weight_kg = mass_kg * MARS_GRAVITY_RATIO
     except Exception:
         raise Exception
 
@@ -82,9 +82,10 @@ def main():
     try:
         print("--- Mars 돔 구조물 설계 프로그램 ---")
         # 사용자로부터 재질, 지름, 두께를 순서대로 입력받습니다.
-        material_input = input("재질을 입력하세요 (유리, 알루미늄, 탄소강): ")
+        material_input = input("재질을 입력하세요 (유리, 알루미늄, 탄소강): ").strip()
         if material_input not in DENSITY_MAP:
-            raise ValueError    
+            raise ValueError
+           
         try:
             diameter_input = input("돔의 지름(m)을 입력하세요: ").strip()
             diameter_input = float(diameter_input)
