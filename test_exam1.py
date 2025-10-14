@@ -9,11 +9,11 @@ git merge --abort
 
 시험 2번 문제 정답
 커밋을 되돌리고 변경사항을 스태이징 상태로 유지 
- - git reset --soft HEAD^
+ - git fetch
  체크아웃된 로컬 브랜치의 upstream을 origin/new-feature으로 설정
  - git branch -u origin/new-feature
 변경사항을 로컬로 가져오되 현재 브랜치에는 병합하지 않음
- - git fetch
+ - git reset --soft HEAD^
 
  3번 시험 문제 정답
 '''
