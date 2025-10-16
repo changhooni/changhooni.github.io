@@ -82,10 +82,6 @@ def main():
     try:
         print("--- Mars 돔 구조물 설계 프로그램 ---")
         # 사용자로부터 재질, 지름, 두께를 순서대로 입력받습니다.
-        material_input = input("재질을 입력하세요 (유리, 알루미늄, 탄소강): ").strip()
-        if material_input not in DENSITY_MAP:
-            raise ValueError
-           
         try:
             diameter_input = input("돔의 지름(m)을 입력하세요: ").strip()
             diameter_input = float(diameter_input)
@@ -94,6 +90,10 @@ def main():
         except ValueError:
             raise ValueError
 
+        material_input = input("재질을 입력하세요 (유리, 알루미늄, 탄소강): ").strip()
+        if material_input not in DENSITY_MAP:
+            raise ValueError
+           
         try:
             thickness_input = input("돔의 두께(cm)를 입력하세요 (기본값: 1, Enter 입력 시): ").strip()
             if thickness_input == '':
