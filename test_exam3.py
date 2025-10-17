@@ -43,7 +43,7 @@ def caesar_cipher_decode(target_text: str) -> list[str]:
     return results
 
 
-def main() -> None:
+def main():
     try:
         # 1) 암호문 복호화 테이블 생성
         decode_passwords = caesar_cipher_decode(CIPHER_TEXT)
