@@ -41,7 +41,7 @@ def read_log(path: str = "mission_computer_main.log")->str:
     except FileNotFoundError:
         print("File Error.")
     except UnicodeDecodeError:
-        print("Decoding Error")
+        print("Decoding Error.")
     except Exception:
         print('Error')
 
@@ -86,7 +86,7 @@ def main():
     except ValueError:
         print("Invalid log format.")
     except RuntimeError:
-        print("Processing error")
+        print("Processing error.")
     except Exception:
         print("Error")
         
